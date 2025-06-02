@@ -19,8 +19,7 @@ func parameterInit() models.TerraDriftInputParams {
 
 func main() {
 	params := parameterInit()
-	fmt.Println(params)
 
 	// Hello World 메시지 출력
-	fmt.Println("%s %s %d", params.SlackParams.Token, params.SlackParams.Channel, params.Concurrency)
+	fmt.Printf("%s %s %d\n", params.SlackParams.Token, params.SlackParams.Channel, params.Concurrency)
 }
