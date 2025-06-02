@@ -1,0 +1,13 @@
+name: 'terradrift'
+description: 'Terraform / Terragrunt Drift Detection'
+author: 'leedonggyu'
+
+inputs:
+  name:
+    description: '인사할 이름'
+    required: true
+    default: 'World'
+
+runs:
+  using: "docker"
+  image: "Dockerfile" 
