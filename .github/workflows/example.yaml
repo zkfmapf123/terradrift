@@ -13,5 +13,5 @@ jobs:
         with:   
           name: "leedonggyu" 
           concurrency: "10"
-          slack_channel: "test"
-          slack_token: "test"
+          slack_channel: "test-1"
+          slack_token: "test-1"
