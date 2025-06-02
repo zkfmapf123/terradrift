@@ -1,9 +1,18 @@
-FROM golang:1.21-alpine
+FROM golang:1.24-alpine as builder
 
 WORKDIR /app
 
-COPY main.go .
+COPY . . 
 
-RUN go build -o terradrift
+RUN go build -o terradrift main.go
+
+FROM scratch as runner
+
+WORKDIR /app
+
+COPY --from=builder /app/terradrift .
 
 ENTRYPOINT ["/app/terradrift"] 
+
+
+
