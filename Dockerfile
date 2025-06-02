@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY main.go .
 
-RUN go build -o terradirft
+RUN go build -o terradrift
 
 ENTRYPOINT ["/app/terradrift"] 
