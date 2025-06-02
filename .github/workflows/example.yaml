@@ -9,7 +9,7 @@ jobs:
   example:
     runs-on: ubuntu-latest
     steps:
-      - uses: zkfmapf123/terradrift@v1.0.2
+      - uses: zkfmapf123/terradrift@v1.0.4
         with:   
           name: "leedonggyu" 
           concurrency: "10"
