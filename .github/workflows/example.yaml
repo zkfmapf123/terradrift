@@ -12,3 +12,6 @@ jobs:
       - uses: zkfmapf123/terradrift@v1.0.2
         with:   
           name: "leedonggyu" 
+          concurrency: "10"
+          slack_channel: "test"
+          slack_token: "test"
