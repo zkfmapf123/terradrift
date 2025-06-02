@@ -3,10 +3,7 @@ package models
 import "strconv"
 
 type TerraDriftInputParams struct {
-	IsUseTerraformPath  string // Terraform Project Path
-	IsUseTerragruntPath string // Terragrunt Project Path
-	Concurrency         int    // Concurrency Level
-
+	Concurrency int              // Concurrency Level
 	SlackParams SlackInputParams // Slack Channel
 }
 
@@ -26,28 +23,6 @@ func TerraDriftInput(opts ...TerraDriftInputOption) TerraDriftInputParams {
 	}
 
 	return *o
-}
-
-func WithIsUseTerraformPath(v string) TerraDriftInputOption {
-	return func(o *TerraDriftInputParams) {
-
-		// if len(v) == 0 {
-		// 	v = nil
-		// }
-
-		o.IsUseTerraformPath = v
-	}
-}
-
-func WithIsUseTerragruntPath(v string) TerraDriftInputOption {
-	return func(o *TerraDriftInputParams) {
-
-		// if len(v) == 0 {
-		// 	v = nil
-		// }
-
-		o.IsUseTerragruntPath = v
-	}
 }
 
 func WithConcurreny(v string) TerraDriftInputOption {
