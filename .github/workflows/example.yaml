@@ -9,6 +9,6 @@ jobs:
   example:
     runs-on: ubuntu-latest
     steps:
-      - uses: leedonggyu/terradrift@v1.0.1
+      - uses: leedonggyu/terradrift@v1.0.2
         with:   
           name: "leedonggyu" 
