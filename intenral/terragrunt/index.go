@@ -1,4 +1,4 @@
-package terraform
+package terragrunt
 
 import (
 	"fmt"
@@ -6,28 +6,37 @@ import (
 	"github.com/zkfmapf123/terradrift/models"
 )
 
-type TerraformParams struct {
+type TerragruntParams struct {
 	Method    string
 	IaCParams models.IaCParams
 }
 
-func New() *TerraformParams {
+func New() *TerragruntParams {
 
 	m := make(map[string]models.DriftResultsParams)
 
-	return &TerraformParams{
+	return &TerragruntParams{
 		Method: "terragrunt",
 		IaCParams: models.IaCParams{
-			PlanPath: []string{},
+			PlanPath: nil,
 			Results:  m,
 		},
 	}
 }
 
-func (tf *TerraformParams) Push(path string) {
-	tf.IaCParams.PlanPath = append(tf.IaCParams.PlanPath, path)
+func (t *TerragruntParams) AllPush(paths []string) {
+	m := make([]string, len(paths))
+
+	copy(paths, m)
+	t.IaCParams.PlanPath = m
 }
 
-func Plan(concurrency int) {
-	fmt.Println("terragrunt")
+func (t *TerragruntParams) Push(path string) {
+	t.IaCParams.PlanPath = append(t.IaCParams.PlanPath, path)
+}
+
+func (t *TerragruntParams) Plan() {
+	for _, path := range t.IaCParams.PlanPath {
+		fmt.Printf("terragrunt : %s\n", path)
+	}
 }

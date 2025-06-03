@@ -18,16 +18,26 @@ func New() *TerraformParams {
 	return &TerraformParams{
 		Method: "terraform",
 		IaCParams: models.IaCParams{
-			PlanPath: []string{},
+			PlanPath: nil,
 			Results:  m,
 		},
 	}
 }
 
-func (tf *TerraformParams) Push(path string) {
-	tf.IaCParams.PlanPath = append(tf.IaCParams.PlanPath, path)
+func (t *TerraformParams) AllPush(paths []string) {
+	m := make([]string, len(paths))
+
+	copy(paths, m)
+	t.IaCParams.PlanPath = m
 }
 
-func Plan(concurrency int) {
-	fmt.Println("terraform")
+func (t *TerraformParams) Push(path string) {
+	t.IaCParams.PlanPath = append(t.IaCParams.PlanPath, path)
+}
+
+func (t *TerraformParams) Plan() {
+
+	for _, path := range t.IaCParams.PlanPath {
+		fmt.Printf("terraform : %s\n", path)
+	}
 }

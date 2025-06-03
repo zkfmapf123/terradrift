@@ -50,15 +50,17 @@ func getWalk(currentDir string, tfPaths map[string]bool, tgPaths map[string]bool
 
 			getWalk(path, tfPaths, tgPaths)
 		} else {
+
+			parentDir := filepath.Dir(path)
 			// terragrunt 검사
 			if entry.Name() == "terragrunt.hcl" {
-				tgPaths[path] = true
+				tgPaths[parentDir] = true
 				continue
 			}
 
 			// terraform 검사
 			if strings.HasSuffix(entry.Name(), ".tf") {
-				tfPaths[path] = true
+				tfPaths[parentDir] = true
 				continue
 			}
 		}

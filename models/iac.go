@@ -12,6 +12,7 @@ type IaCParams struct {
 }
 
 type DriftResultFuncs interface {
+	AllPush(paths []string)
 	Push(path string)
-	Plan(concurrency int)
+	Plan()
 }
