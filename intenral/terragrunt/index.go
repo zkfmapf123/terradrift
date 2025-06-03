@@ -27,7 +27,7 @@ func New() *TerragruntParams {
 func (t *TerragruntParams) AllPush(paths []string) {
 	m := make([]string, len(paths))
 
-	copy(paths, m)
+	copy(m, paths)
 	t.IaCParams.PlanPath = m
 }
 
