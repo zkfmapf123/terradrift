@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/ashwanthkumar/slack-go-webhook"
 	"github.com/zkfmapf123/terradrift/intenral/cmd"
 	"github.com/zkfmapf123/terradrift/intenral/strings"
 	"github.com/zkfmapf123/terradrift/intenral/terraform"
@@ -83,7 +84,27 @@ func run(concurreny int, iacManager map[string]models.DriftResultFuncs) map[stri
 
 func sendSlack(slackChannel string, slackToken string, report map[string]models.DriftResultsParams) {
 
+	attach := slack.Attachment{}
+
 	for path, result := range report {
-		fmt.Println(path, result)
+		attach.AddField(slack.Field{Title: "Path", Value: path, Short: true})
+
+		if result.Add == "0" && result.Change == "0" && result.Destroy == "0" {
+			attach.AddField(slack.Field{Title: "Result", Value: "No Changes...", Short: false})
+			continue
+		}
+
+		attach.AddField(slack.Field{Title: "Result", Value: fmt.Sprintf("Add : %s, Change : %s, Destory : %s", result.Add, result.Change, result.Destroy), Short: false})
+	}
+
+	p := slack.Payload{
+		Text:        "TerraDirft Reports",
+		Channel:     slackChannel,
+		Attachments: []slack.Attachment{attach},
+	}
+
+	err := slack.Send(slackToken, "", p)
+	if len(err) > 0 {
+		fmt.Println(err)
 	}
 }

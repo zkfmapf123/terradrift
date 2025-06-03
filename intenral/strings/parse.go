@@ -23,7 +23,6 @@ func IaCParsing(b []byte) models.DriftResultsParams {
 				Change:  matches[2],
 				Destroy: matches[3],
 			}
-
 		}
 	}
 
