@@ -65,7 +65,7 @@ func ParsingSlackMessage(path string, result models.DriftResultsParams) (string,
 	path = strings.ReplaceAll(path, "/github/workspace", "")
 	res := ""
 
-	if result.Add == "0" || result.Change == "0" || result.Destroy == "0" {
+	if result.Add == "0" && result.Change == "0" && result.Destroy == "0" {
 		res = "No Changes"
 	} else {
 		res = fmt.Sprintf("Add %s, Change %s, Destory %s", result.Add, result.Change, result.Destroy)
