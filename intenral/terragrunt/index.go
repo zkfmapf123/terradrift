@@ -2,6 +2,7 @@ package terragrunt
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/zkfmapf123/terradrift/intenral/cmd"
 	"github.com/zkfmapf123/terradrift/intenral/strings"
@@ -42,9 +43,11 @@ func (t *TerragruntParams) Plan(concurreny int) map[string]models.DriftResultsPa
 
 	planResult := make(map[string]models.DriftResultsParams)
 	for _, path := range t.IaCParams.PlanPath {
+
+		cmd.Exec("terragrunt", fmt.Sprintf("--terragrunt-working-dir=%s", path), "init")
 		b, err := cmd.Exec("terragrunt", fmt.Sprintf("--terragrunt-working-dir=%s", path), "plan")
 		if err != nil {
-			panic(err)
+			log.Fatalln("output : ", string(b), "err : ", err)
 		}
 
 		result := strings.IaCParsing(b)

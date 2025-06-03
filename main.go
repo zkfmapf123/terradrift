@@ -17,25 +17,25 @@ import (
 // 파라미터 설정 메서드
 func parameterInit() models.TerraDriftInputParams {
 
-	AWS_ACCESS_KEY := os.Getenv("INPUT_ACCESS_KEY")
-	AWS_SECRET_ACCESS_KEY := os.Getenv("INPUT_SECRET_ACCESS_KEY")
-	REGION := os.Getenv("AWS_REGION")
+	// AWS_ACCESS_KEY := os.Getenv("INPUT_ACCESS_KEY")
+	// AWS_SECRET_ACCESS_KEY := os.Getenv("INPUT_SECRET_ACCESS_KEY")
+	// REGION := os.Getenv("AWS_REGION")
 
-	os.Setenv("AWS_ACCESS_KEY_ID", AWS_ACCESS_KEY)
-	os.Setenv("AWS_SECRET_ACCESS_KEY", AWS_SECRET_ACCESS_KEY)
-	os.Setenv("AWS_REGION", REGION)
+	// os.Setenv("AWS_ACCESS_KEY_ID", AWS_ACCESS_KEY)
+	// os.Setenv("AWS_SECRET_ACCESS_KEY", AWS_SECRET_ACCESS_KEY)
+	// os.Setenv("AWS_REGION", REGION)
 
-	if AWS_ACCESS_KEY == "" {
-		panic("Not Exstis AWS_ACCESS_KEY_ID")
-	}
+	// if AWS_ACCESS_KEY == "" {
+	// 	panic("Not Exstis AWS_ACCESS_KEY_ID")
+	// }
 
-	if AWS_SECRET_ACCESS_KEY == "" {
-		panic("Not Exsist AWS_SECRET_ACCESS_KEY")
-	}
+	// if AWS_SECRET_ACCESS_KEY == "" {
+	// 	panic("Not Exsist AWS_SECRET_ACCESS_KEY")
+	// }
 
-	if REGION == "" {
-		REGION = "ap-northeast-2"
-	}
+	// if REGION == "" {
+	// 	REGION = "ap-northeast-2"
+	// }
 
 	return models.TerraDriftInput(
 		models.WithConcurreny(os.Getenv("INPUT_CONCURRENCY")),
@@ -83,7 +83,13 @@ func main() {
 	fmt.Printf("method time : %d ms\n", end.Milliseconds())
 
 	// slack send
-	sendSlack(params.SlackParams.Channel, params.SlackParams.Token, resultReport)
+	if params.SlackParams.Token == "" || params.SlackParams.Channel == "" {
+		fmt.Println("No Slack Values...")
+		fmt.Println(resultReport)
+		return
+	} else {
+		sendSlack(params.SlackParams.Channel, params.SlackParams.Token, resultReport)
+	}
 
 }
 
