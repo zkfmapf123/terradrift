@@ -25,6 +25,9 @@ func parameterInit() models.TerraDriftInputParams {
 	os.Setenv("AWS_SECRET_ACCESS_KEY", AWS_SECRET_ACCESS_KEY)
 	os.Setenv("AWS_REGION", REGION)
 
+	fmt.Println(os.Getenv("AWS_ACCESS_KEY_ID"))
+	fmt.Println(os.Getenv("AWS_SECRET_ACCESS_KEY"))
+
 	if AWS_ACCESS_KEY == "" {
 		panic("Not Exstis AWS_ACCESS_KEY_ID")
 	}
