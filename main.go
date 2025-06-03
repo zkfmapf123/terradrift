@@ -58,11 +58,27 @@ func main() {
 	iacManager["terragrunt"].AllPush(tgPathArr)
 
 	started := time.Now()
+
+	//////////////////////////////////////// Execute ////////////////////////////////////////
+
 	// plan
 	for _, v := range COMMAND_LOOP {
-		iacManager[v].Plan(params.Concurrency, resultCh)
+
+		go func(syntax string) {
+			iacManager[syntax].Plan(params.Concurrency, resultCh)
+		}(v)
+	}
+
+	for {
+
+		select {
+		case result := <-resultCh:
+			fmt.Println(result)
+		}
+
 	}
 
 	end := time.Since(started)
+
 	fmt.Printf("method time : %d ms\n", end.Milliseconds())
 }

@@ -3,6 +3,8 @@ package terragrunt
 import (
 	"fmt"
 
+	"github.com/zkfmapf123/terradrift/intenral/cmd"
+	"github.com/zkfmapf123/terradrift/intenral/strings"
 	"github.com/zkfmapf123/terradrift/models"
 )
 
@@ -37,6 +39,18 @@ func (t *TerragruntParams) Push(path string) {
 
 func (t *TerragruntParams) Plan(concurreny int, resultCh chan<- map[string]models.DriftResultsParams) {
 	for _, path := range t.IaCParams.PlanPath {
-		fmt.Printf("terragrunt : %s\n", path)
+		b, err := cmd.Exec("terragrunt", fmt.Sprintf("-chdir=%s", path), "plan")
+		if err != nil {
+			panic(err)
+		}
+
+		result := strings.TerraformParsing(b)
+		resultCh <- map[string]models.DriftResultsParams{
+			path: {
+				Add:     result.Add,
+				Change:  result.Change,
+				Destroy: result.Destroy,
+			},
+		}
 	}
 }
