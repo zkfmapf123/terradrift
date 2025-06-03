@@ -47,7 +47,7 @@ func (t *TerragruntParams) Plan(concurreny int) map[string]models.DriftResultsPa
 		cmd.Exec("terragrunt", fmt.Sprintf("--terragrunt-working-dir=%s", path), "init")
 		b, err := cmd.Exec("terragrunt", fmt.Sprintf("--terragrunt-working-dir=%s", path), "plan")
 		if err != nil {
-			log.Fatalln("path : ", path, " output : ", string(b), " err : ", err)
+			log.Fatalln("[Terragrunt Error] path : ", path, " output : ", string(b), " err : ", err)
 		}
 
 		result := strings.IaCParsing(b)
