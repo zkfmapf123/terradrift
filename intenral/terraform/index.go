@@ -45,7 +45,7 @@ func (t *TerraformParams) Plan(concurrency int) map[string]models.DriftResultsPa
 		cmd.Exec("terraform", fmt.Sprintf("-chdir=%s", path), "init")
 		b, err := cmd.Exec("terraform", fmt.Sprintf("-chdir=%s", path), "plan")
 		if err != nil {
-			log.Fatalln("output : ", string(b), "err : ", err)
+			log.Fatalln("path : ", path, " output : ", string(b), " err : ", err)
 		}
 
 		result := strings.IaCParsing(b)
