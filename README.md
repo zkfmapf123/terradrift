@@ -56,7 +56,7 @@ jobs:
 
 | Name | Description | Required | Default |
 |------|-------------|----------|---------|
-| `concurrency` | 동시 실행 수 | No | 1 |
+| `concurrency` | 동시 실행 수 | No | 5 |
 | `slack_channel` | Slack 채널 이름 | No | - |
 | `slack_token` | Slack Webhook URL | No | - |
 

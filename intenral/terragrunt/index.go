@@ -3,6 +3,7 @@ package terragrunt
 import (
 	"fmt"
 	"log"
+	"sync"
 
 	"github.com/zkfmapf123/terradrift/intenral/cmd"
 	"github.com/zkfmapf123/terradrift/intenral/strings"
@@ -40,21 +41,52 @@ func (t *TerragruntParams) Push(path string) {
 
 // terragrunt 가 terraform 자체를 한번더 감싸서 뭔ㄱ ㅏ안잡히는것같음...
 func (t *TerragruntParams) Plan(concurreny int) map[string]models.DriftResultsParams {
-
 	planResult := make(map[string]models.DriftResultsParams)
+	resultChan := make(chan struct {
+		path   string
+		result models.DriftResultsParams
+	})
+
+	workerpool := make(chan struct{}, concurreny)
+	var wg sync.WaitGroup
+
 	for _, path := range t.IaCParams.PlanPath {
+		wg.Add(1)
 
-		cmd.Exec("terragrunt", fmt.Sprintf("--terragrunt-working-dir=%s", path), "init")
-		b, err := cmd.Exec("terragrunt", fmt.Sprintf("--terragrunt-working-dir=%s", path), "plan")
-		if err != nil {
-			log.Fatalln("[Terragrunt Error] path : ", path, " output : ", string(b), " err : ", err)
-		}
+		go func(p string) {
 
-		result := strings.IaCParsing(b)
-		planResult[path] = models.DriftResultsParams{
-			Add:     result.Add,
-			Change:  result.Change,
-			Destroy: result.Destroy,
+			defer wg.Done()
+			workerpool <- struct{}{}
+			defer func() { <-workerpool }()
+
+			cmd.Exec("terragrunt", fmt.Sprintf("--terragrunt-working-dir=%s", p), "init")
+			b, err := cmd.Exec("terragrunt", fmt.Sprintf("--terragrunt-working-dir=%s", p), "plan")
+			if err != nil {
+				log.Fatalln("[Terragrunt Error] path : ", p, " output : ", string(b), " err : ", err)
+			}
+
+			result := strings.IaCParsing(b)
+			resultChan <- struct {
+				path   string
+				result models.DriftResultsParams
+			}{
+				path: p,
+				result: models.DriftResultsParams{
+					Add:     result.Add,
+					Change:  result.Change,
+					Destroy: result.Destroy,
+				},
+			}
+
+		}(path)
+
+		go func() {
+			wg.Wait()
+			close(resultChan)
+		}()
+
+		for r := range resultChan {
+			planResult[r.path] = r.result
 		}
 	}
 

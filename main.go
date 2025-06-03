@@ -65,7 +65,7 @@ func main() {
 		fmt.Println("No Slack Values...")
 
 		for path, res := range resultReport {
-			fmt.Printf("path : %s add : %s changes : %s destory : %s", path, res.Add, res.Change, res.Destroy)
+			fmt.Printf("path : %s add : %s changes : %s destory : %s\n", path, res.Add, res.Change, res.Destroy)
 		}
 
 	} else {

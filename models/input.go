@@ -44,7 +44,7 @@ func WithConcurreny(v string) TerraDriftInputOption {
 	return func(options *TerraDriftInputParams) {
 
 		if v == "" {
-			options.Concurrency = 0
+			options.Concurrency = 5
 		} else {
 			n, err := strconv.Atoi(v)
 			if err != nil {
