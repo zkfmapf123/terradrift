@@ -79,18 +79,22 @@ func main() {
 	// Run....
 	started := time.Now()
 	resultReport := run(params.Concurrency, iacManager)
-	end := time.Since(started)
-	fmt.Printf("method time : %d ms\n", end.Milliseconds())
 
 	// slack send
 	if params.SlackParams.Token == "" || params.SlackParams.Channel == "" {
 		fmt.Println("No Slack Values...")
-		fmt.Println(resultReport)
-		return
+
+		for path, res := range resultReport {
+			fmt.Printf("path : %s add : %s changes : %s destory : %s", path, res.Add, res.Change, res.Destroy)
+		}
+
 	} else {
 		sendSlack(params.SlackParams.Channel, params.SlackParams.Token, resultReport)
 	}
 
+	end := time.Since(started)
+	fmt.Printf("method time : %d ms\n", end.Milliseconds())
+	return
 }
 
 func run(concurreny int, iacManager map[string]models.DriftResultFuncs) map[string]models.DriftResultsParams {
