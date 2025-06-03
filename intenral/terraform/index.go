@@ -46,7 +46,7 @@ func (t *TerraformParams) Plan(concurrency int) map[string]models.DriftResultsPa
 			panic(err)
 		}
 
-		result := strings.TerraformParsing(b)
+		result := strings.IaCParsing(b)
 		planResult[path] = models.DriftResultsParams{
 			Add:     result.Add,
 			Change:  result.Change,
