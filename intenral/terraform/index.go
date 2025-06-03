@@ -45,6 +45,13 @@ func (t *TerraformParams) Plan(concurrency int, resultCh chan<- map[string]model
 			panic(err)
 		}
 
-		fmt.Println(strings.TerraformParsing(b))
+		result := strings.TerraformParsing(b)
+		resultCh <- map[string]models.DriftResultsParams{
+			path: {
+				Add:     result.Add,
+				Change:  result.Change,
+				Destroy: result.Destroy,
+			},
+		}
 	}
 }
