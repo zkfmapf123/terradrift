@@ -1,7 +1,6 @@
 package strings
 
 import (
-	"fmt"
 	"regexp"
 
 	"github.com/zkfmapf123/terradrift/models"
@@ -11,8 +10,6 @@ func TerraformParsing(b []byte) models.DriftResultsParams {
 
 	re := regexp.MustCompile(`Plan: (\d+) to add, (\d+) to change, (\d+) to destroy\.`)
 	matches := re.FindStringSubmatch(string(b))
-
-	fmt.Println(matches)
 
 	// plan
 	if len(matches) == 4 {

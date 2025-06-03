@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"maps"
 	"os"
 	"time"
 
@@ -40,8 +41,6 @@ var (
 
 func main() {
 
-	resultCh := make(chan map[string]models.DriftResultsParams)
-
 	params := parameterInit()
 	tfPaths, tgPaths, err := cmd.GetCurrentDirOrFile()
 	if err != nil {
@@ -57,28 +56,34 @@ func main() {
 	iacManager["terraform"].AllPush(tfPathArr)
 	iacManager["terragrunt"].AllPush(tgPathArr)
 
+	// Run....
 	started := time.Now()
+	resultReport := run(params.Concurrency, iacManager)
+	end := time.Since(started)
+	fmt.Printf("method time : %d ms\n", end.Milliseconds())
 
-	//////////////////////////////////////// Execute ////////////////////////////////////////
+	// slack send
+	sendSlack(params.SlackParams.Channel, params.SlackParams.Token, resultReport)
+
+}
+
+func run(concurreny int, iacManager map[string]models.DriftResultFuncs) map[string]models.DriftResultsParams {
+
+	result := make(map[string]models.DriftResultsParams)
 
 	// plan
 	for _, v := range COMMAND_LOOP {
 
-		go func(syntax string) {
-			iacManager[syntax].Plan(params.Concurrency, resultCh)
-		}(v)
+		r := iacManager[v].Plan(concurreny)
+		maps.Copy(result, r)
 	}
 
-	for {
+	return result
+}
 
-		select {
-		case result := <-resultCh:
-			fmt.Println(result)
-		}
+func sendSlack(slackChannel string, slackToken string, report map[string]models.DriftResultsParams) {
 
+	for path, result := range report {
+		fmt.Println(path, result)
 	}
-
-	end := time.Since(started)
-
-	fmt.Printf("method time : %d ms\n", end.Milliseconds())
 }

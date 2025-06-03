@@ -14,5 +14,5 @@ type IaCParams struct {
 type DriftResultFuncs interface {
 	AllPush(paths []string)
 	Push(path string)
-	Plan(int, chan<- map[string]DriftResultsParams)
+	Plan(int) map[string]DriftResultsParams
 }

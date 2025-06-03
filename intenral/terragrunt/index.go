@@ -37,20 +37,22 @@ func (t *TerragruntParams) Push(path string) {
 	t.IaCParams.PlanPath = append(t.IaCParams.PlanPath, path)
 }
 
-func (t *TerragruntParams) Plan(concurreny int, resultCh chan<- map[string]models.DriftResultsParams) {
+func (t *TerragruntParams) Plan(concurreny int) map[string]models.DriftResultsParams {
+
+	planResult := make(map[string]models.DriftResultsParams)
 	for _, path := range t.IaCParams.PlanPath {
-		b, err := cmd.Exec("terragrunt", fmt.Sprintf("-chdir=%s", path), "plan")
+		b, err := cmd.Exec("terragrunt", fmt.Sprintf("--terragrunt-working-dir=%s", path), "plan")
 		if err != nil {
 			panic(err)
 		}
 
 		result := strings.TerraformParsing(b)
-		resultCh <- map[string]models.DriftResultsParams{
-			path: {
-				Add:     result.Add,
-				Change:  result.Change,
-				Destroy: result.Destroy,
-			},
+		planResult[path] = models.DriftResultsParams{
+			Add:     result.Add,
+			Change:  result.Change,
+			Destroy: result.Destroy,
 		}
 	}
+
+	return planResult
 }
