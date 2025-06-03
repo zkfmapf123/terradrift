@@ -107,7 +107,7 @@ func sendSlack(slackChannel string, slackToken string, report map[string]models.
 	}
 
 	p := slack.Payload{
-		Text:        "TerraDirft Reports",
+		Text:        "TerraDrift Reports",
 		Channel:     slackChannel,
 		Attachments: []slack.Attachment{attach},
 	}
