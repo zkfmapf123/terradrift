@@ -57,7 +57,6 @@ func Test_TerraformParsing_2(t *testing.T) {
   + v = "hello world"
 	`
 
-	IaCParsing([]byte(text))
 	v := IaCParsing([]byte(text))
 	assert.Equal(t, v.Add, "0")
 	assert.Equal(t, v.Change, "0")
@@ -70,8 +69,6 @@ func Test_TerraformParsing_3(t *testing.T) {
 	text := `
 		No changes. Your infrastructure matches the configuration.
 	`
-
-	IaCParsing([]byte(text))
 	v := IaCParsing([]byte(text))
 	assert.Equal(t, v.Add, "0")
 	assert.Equal(t, v.Change, "0")
@@ -113,7 +110,7 @@ func Test_TerraformParsing_4(t *testing.T) {
 15:23:13.637 STDOUT terraform:       + target_health_state (known after apply)
 15:23:13.637 STDOUT terraform:     }
 15:23:13.637 STDOUT terraform: Plan: 7 to add, 0 to change, 0 to destroy.
-15:23:13.637 STDOUT terraform: 
+15:23:13.637 STDOUT terraform:
 15:23:13.637 STDOUT terraform: ─────────────────────────────────────────────────────────────────────────────
 15:23:13.637 STDOUT terraform: Note: You didn't use the -out option to save this plan, so Terraform can't
 15:23:13.637 STDOUT terraform: guarantee to take exactly these actions if you run "terraform apply" now.

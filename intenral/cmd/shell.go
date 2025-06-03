@@ -1,6 +1,8 @@
 package cmd
 
-import "os/exec"
+import (
+	"os/exec"
+)
 
 func Exec(args ...string) ([]byte, error) {
 

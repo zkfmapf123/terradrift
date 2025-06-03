@@ -2,21 +2,28 @@ package strings
 
 import (
 	"regexp"
+	"strings"
 
 	"github.com/zkfmapf123/terradrift/models"
 )
 
 func IaCParsing(b []byte) models.DriftResultsParams {
 
-	re := regexp.MustCompile(`Plan: (\d+) to add, (\d+) to change, (\d+) to destroy\.`)
-	matches := re.FindStringSubmatch(string(b))
+	lines := strings.Split(string(b), "\n")
 
-	// plan
-	if len(matches) == 4 {
-		return models.DriftResultsParams{
-			Add:     matches[1],
-			Change:  matches[2],
-			Destroy: matches[3],
+	for _, line := range lines {
+		if strings.Contains(line, "Plan:") {
+
+			planLines := strings.Split(line, "Plan:")
+			re := regexp.MustCompile(`(\d+)\s+to add,\s+(\d+)\s+to change,\s+(\d+)\s+to destroy`)
+			matches := re.FindStringSubmatch(planLines[1])
+
+			return models.DriftResultsParams{
+				Add:     matches[1],
+				Change:  matches[2],
+				Destroy: matches[3],
+			}
+
 		}
 	}
 

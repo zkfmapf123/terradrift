@@ -37,6 +37,7 @@ func (t *TerragruntParams) Push(path string) {
 	t.IaCParams.PlanPath = append(t.IaCParams.PlanPath, path)
 }
 
+// terragrunt 가 terraform 자체를 한번더 감싸서 뭔ㄱ ㅏ안잡히는것같음...
 func (t *TerragruntParams) Plan(concurreny int) map[string]models.DriftResultsParams {
 
 	planResult := make(map[string]models.DriftResultsParams)
@@ -45,8 +46,6 @@ func (t *TerragruntParams) Plan(concurreny int) map[string]models.DriftResultsPa
 		if err != nil {
 			panic(err)
 		}
-
-		fmt.Println(">>> ", string(b), path)
 
 		result := strings.IaCParsing(b)
 		planResult[path] = models.DriftResultsParams{
