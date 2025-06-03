@@ -3,6 +3,9 @@ package models
 import "strconv"
 
 type TerraDriftInputParams struct {
+	AccessKey       string
+	AccessSecretKey string
+
 	Concurrency int              // Concurrency Level
 	SlackParams SlackInputParams // Slack Channel
 }
@@ -23,6 +26,18 @@ func TerraDriftInput(opts ...TerraDriftInputOption) TerraDriftInputParams {
 	}
 
 	return *o
+}
+
+func WithAccessKey(v string) TerraDriftInputOption {
+	return func(options *TerraDriftInputParams) {
+		options.AccessKey = v
+	}
+}
+
+func WithAccessSecretKey(v string) TerraDriftInputOption {
+	return func(options *TerraDriftInputParams) {
+		options.AccessSecretKey = v
+	}
 }
 
 func WithConcurreny(v string) TerraDriftInputOption {

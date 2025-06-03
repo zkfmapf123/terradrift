@@ -17,12 +17,31 @@ import (
 // 파라미터 설정 메서드
 func parameterInit() models.TerraDriftInputParams {
 
+	AWS_ACCESS_KEY := os.Getenv("INPUT_ACCESS_KEY")
+	AWS_SECRET_ACCESS_KEY := os.Getenv("INPUT_SECRET_ACCESS_KEY")
+	REGION := os.Getenv("AWS_REGION")
+
+	os.Setenv("AWS_ACCESS_KEY_ID", AWS_ACCESS_KEY)
+	os.Setenv("AWS_SECRET_ACCESS_KEY", AWS_SECRET_ACCESS_KEY)
+	os.Setenv("AWS_REGION", REGION)
+
+	if AWS_ACCESS_KEY == "" {
+		panic("Not Exstis AWS_ACCESS_KEY_ID")
+	}
+
+	if AWS_SECRET_ACCESS_KEY == "" {
+		panic("Not Exsist AWS_SECRET_ACCESS_KEY")
+	}
+
+	if REGION == "" {
+		REGION = "ap-northeast-2"
+	}
+
 	return models.TerraDriftInput(
 		models.WithConcurreny(os.Getenv("INPUT_CONCURRENCY")),
 		models.WithSlackChannel(os.Getenv("INPUT_SLACK_CHANNEL")),
 		models.WithSlackToken(os.Getenv("INPUT_SLACK_TOKEN")),
 	)
-
 }
 
 /*
