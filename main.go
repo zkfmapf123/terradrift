@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/zkfmapf123/donggo"
 	"github.com/zkfmapf123/terradrift/intenral/cmd"
@@ -52,11 +53,12 @@ func main() {
 	iacManager["terraform"].AllPush(donggo.OKeys(tfPaths))
 	iacManager["terragrunt"].AllPush(donggo.OKeys(tgPaths))
 
+	started := time.Now()
 	// plan
 	for _, v := range COMMAND_LOOP {
 		iacManager[v].Plan()
 	}
 
-	// Hello World 메시지 출력
-	fmt.Printf("%s %s %d\n", params.SlackParams.Token, params.SlackParams.Channel, params.Concurrency)
+	end := time.Since(started)
+	fmt.Println("method time : %d ms\n", end.Milliseconds())
 }
