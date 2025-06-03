@@ -46,6 +46,8 @@ func (t *TerragruntParams) Plan(concurreny int) map[string]models.DriftResultsPa
 			panic(err)
 		}
 
+		fmt.Println(string(b))
+
 		result := strings.TerraformParsing(b)
 		planResult[path] = models.DriftResultsParams{
 			Add:     result.Add,
