@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/zkfmapf123/donggo"
 	"github.com/zkfmapf123/terradrift/intenral/cmd"
+	"github.com/zkfmapf123/terradrift/intenral/strings"
 	"github.com/zkfmapf123/terradrift/intenral/terraform"
 	"github.com/zkfmapf123/terradrift/intenral/terragrunt"
 	"github.com/zkfmapf123/terradrift/models"
@@ -24,13 +24,14 @@ func parameterInit() models.TerraDriftInputParams {
 }
 
 /*
-- 파일구조 파악
-- 파일내에서 terraform , terragrunt path 확인하기
+- 1. 파일구조 파악
+- 2. 파일내에서 terraform , terragrunt path 확인하기
   - Terraform -> provider.tf
   - Terragrunt -> terragrunt.hcl
+- 2.1 TG / TF Path 별 중복검사
 
-- path 에서 paln 후 결과 모으기
-- slack message
+- 3. path 에서 paln 후 결과 모으기
+- 4. slack message
 */
 
 var (
@@ -50,15 +51,16 @@ func main() {
 		"terragrunt": terragrunt.New(),
 	}
 
-	iacManager["terraform"].AllPush(donggo.OKeys(tfPaths))
-	iacManager["terragrunt"].AllPush(donggo.OKeys(tgPaths))
+	tgPathArr, tfPathArr := strings.ParsingClear(tgPaths, tfPaths)
+	iacManager["terraform"].AllPush(tfPathArr)
+	iacManager["terragrunt"].AllPush(tgPathArr)
 
 	started := time.Now()
 	// plan
 	for _, v := range COMMAND_LOOP {
-		iacManager[v].Plan()
+		iacManager[v].Plan(params.Concurrency)
 	}
 
 	end := time.Since(started)
-	fmt.Println("method time : %d ms\n", end.Milliseconds())
+	fmt.Printf("method time : %d ms\n", end.Milliseconds())
 }

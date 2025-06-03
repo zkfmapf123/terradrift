@@ -1,9 +1,9 @@
 package models
 
 type DriftResultsParams struct {
-	Add     int
-	Change  int
-	Destroy int
+	Add     string
+	Change  string
+	Destroy string
 }
 
 type IaCParams struct {
@@ -14,5 +14,5 @@ type IaCParams struct {
 type DriftResultFuncs interface {
 	AllPush(paths []string)
 	Push(path string)
-	Plan()
+	Plan(int)
 }

@@ -14,6 +14,7 @@ var (
 		"vendor":       true,
 		"dist":         true,
 		"build":        true,
+		".terraform":   true,
 	}
 )
 

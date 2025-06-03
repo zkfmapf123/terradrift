@@ -35,9 +35,14 @@ func (t *TerraformParams) Push(path string) {
 	t.IaCParams.PlanPath = append(t.IaCParams.PlanPath, path)
 }
 
-func (t *TerraformParams) Plan() {
+func (t *TerraformParams) Plan(concurrency int) {
 
 	for _, path := range t.IaCParams.PlanPath {
-		fmt.Printf("terraform : %s\n", path)
+		// b, err := cmd.Exec("terraform", fmt.Sprintf("-chdir=%s", path), "plan")
+		// if err != nil {
+		// 	panic(err)
+		// }
+
+		fmt.Println("terraform : ", path)
 	}
 }
