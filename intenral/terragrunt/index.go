@@ -35,7 +35,7 @@ func (t *TerragruntParams) Push(path string) {
 	t.IaCParams.PlanPath = append(t.IaCParams.PlanPath, path)
 }
 
-func (t *TerragruntParams) Plan(concurreny int) {
+func (t *TerragruntParams) Plan(concurreny int, resultCh chan<- map[string]models.DriftResultsParams) {
 	for _, path := range t.IaCParams.PlanPath {
 		fmt.Printf("terragrunt : %s\n", path)
 	}

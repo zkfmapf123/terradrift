@@ -3,6 +3,8 @@ package terraform
 import (
 	"fmt"
 
+	"github.com/zkfmapf123/terradrift/intenral/cmd"
+	"github.com/zkfmapf123/terradrift/intenral/strings"
 	"github.com/zkfmapf123/terradrift/models"
 )
 
@@ -35,14 +37,14 @@ func (t *TerraformParams) Push(path string) {
 	t.IaCParams.PlanPath = append(t.IaCParams.PlanPath, path)
 }
 
-func (t *TerraformParams) Plan(concurrency int) {
+func (t *TerraformParams) Plan(concurrency int, resultCh chan<- map[string]models.DriftResultsParams) {
 
 	for _, path := range t.IaCParams.PlanPath {
-		// b, err := cmd.Exec("terraform", fmt.Sprintf("-chdir=%s", path), "plan")
-		// if err != nil {
-		// 	panic(err)
-		// }
+		b, err := cmd.Exec("terraform", fmt.Sprintf("-chdir=%s", path), "plan")
+		if err != nil {
+			panic(err)
+		}
 
-		fmt.Println("terraform : ", path)
+		fmt.Println(strings.TerraformParsing(b))
 	}
 }

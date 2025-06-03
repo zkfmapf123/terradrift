@@ -39,8 +39,10 @@ var (
 )
 
 func main() {
-	params := parameterInit()
 
+	resultCh := make(chan map[string]models.DriftResultsParams)
+
+	params := parameterInit()
 	tfPaths, tgPaths, err := cmd.GetCurrentDirOrFile()
 	if err != nil {
 		panic(err)
@@ -58,7 +60,7 @@ func main() {
 	started := time.Now()
 	// plan
 	for _, v := range COMMAND_LOOP {
-		iacManager[v].Plan(params.Concurrency)
+		iacManager[v].Plan(params.Concurrency, resultCh)
 	}
 
 	end := time.Since(started)
