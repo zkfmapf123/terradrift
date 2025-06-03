@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/zkfmapf123/terradrift/models"
 )
 
 func Test_ParsingClear(t *testing.T) {
@@ -121,4 +122,25 @@ func Test_TerraformParsing_4(t *testing.T) {
 	assert.Equal(t, v.Change, "0")
 	assert.Equal(t, v.Destroy, "0")
 
+}
+
+func Test_ParsingSlackMessage(t *testing.T) {
+
+	p1, s1 := ParsingSlackMessage("/github/workspace/test", models.DriftResultsParams{
+		Add:     "22",
+		Change:  "100",
+		Destroy: "10",
+	})
+
+	p2, s2 := ParsingSlackMessage("/github/workspace/test", models.DriftResultsParams{
+		Add:     "0",
+		Change:  "0",
+		Destroy: "0",
+	})
+
+	assert.Equal(t, p1, "/test")
+	assert.Equal(t, p2, "/test")
+
+	assert.Equal(t, s1, "Result : Add 22, Change 100, Destory 10")
+	assert.Equal(t, s2, "Result : No Changes")
 }

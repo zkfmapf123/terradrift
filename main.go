@@ -101,14 +101,9 @@ func sendSlack(slackChannel string, slackToken string, report map[string]models.
 	attach := slack.Attachment{}
 
 	for path, result := range report {
-		attach.AddField(slack.Field{Title: "Path", Value: path, Short: false})
 
-		if result.Add == "0" && result.Change == "0" && result.Destroy == "0" {
-			attach.AddField(slack.Field{Title: "Result", Value: "No Changes...", Short: false})
-			continue
-		}
-
-		attach.AddField(slack.Field{Title: "Result", Value: fmt.Sprintf("Add : %s, Change : %s, Destory : %s", result.Add, result.Change, result.Destroy), Short: false})
+		path, res := strings.ParsingSlackMessage(path, result)
+		attach.AddField(slack.Field{Title: path, Value: res, Short: false})
 	}
 
 	p := slack.Payload{
