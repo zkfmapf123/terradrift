@@ -21,6 +21,9 @@ func parameterInit() models.TerraDriftInputParams {
 /*
 - 파일구조 파악
 - 파일내에서 terraform , terragrunt path 확인하기
+  - Terraform -> provider.tf
+  - Terragrunt -> terragrunt.hcl
+
 - path 에서 paln 후 결과 모으기
 - slack message
 */

@@ -1,7 +1,5 @@
 package models
 
-type IacPlanPath string
-
 type DriftResultsParams struct {
 	Add     int
 	Change  int
@@ -9,11 +7,11 @@ type DriftResultsParams struct {
 }
 
 type IaCParams struct {
-	Method   string
 	PlanPath []string
-	Results  map[IacPlanPath]DriftResultsParams
+	Results  map[string]DriftResultsParams
 }
 
 type DriftResultFuncs interface {
-	Plan()
+	Push(path string)
+	Plan(concurrency int)
 }
