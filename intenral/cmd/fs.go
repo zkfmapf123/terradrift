@@ -9,6 +9,7 @@ import (
 var (
 	EXCLUDE_DIR = map[string]bool{
 		".git":         true,
+		"github":       true,
 		".github":      true,
 		"node_modules": true,
 		"vendor":       true,

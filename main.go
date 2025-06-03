@@ -84,6 +84,11 @@ func run(concurreny int, iacManager map[string]models.DriftResultFuncs) map[stri
 
 func sendSlack(slackChannel string, slackToken string, report map[string]models.DriftResultsParams) {
 
+	if slackChannel == "" || slackToken == "" {
+		fmt.Println("No Slack Values...")
+		return
+	}
+
 	attach := slack.Attachment{}
 
 	for path, result := range report {
